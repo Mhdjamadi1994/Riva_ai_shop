@@ -59,7 +59,21 @@ jobs:
         run: python manage.py check
 
       - name: Run tests
-        run: python manage.py test --noinput
+        shell: bash
+        run: |
+          set +e
+          python manage.py test --noinput 2>&1 | tee /tmp/riva-test-output.log
+          test_status=${PIPESTATUS[0]}
+          if [ "$test_status" -ne 0 ]; then
+            {
+              echo "## Failed test names"
+              grep -E '^(FAIL|ERROR):' /tmp/riva-test-output.log || true
+            } >> "$GITHUB_STEP_SUMMARY"
+            while IFS= read -r failed_test; do
+              echo "::error title=Test failure::$failed_test"
+            done < <(grep -E '^(FAIL|ERROR):' /tmp/riva-test-output.log || true)
+          fi
+          exit "$test_status"
 
       - name: Check production security configuration
         env:
