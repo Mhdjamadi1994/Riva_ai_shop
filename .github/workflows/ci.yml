@@ -73,10 +73,16 @@ jobs:
               echo "::error title=Test failure::$failed_test"
             done < <(grep -E '^(FAIL|ERROR):' /tmp/riva-test-output.log || true)
             grep -E '^[A-Za-z_][A-Za-z0-9_.]*: ' /tmp/riva-test-output.log \
+              | grep -vE '^(FAIL|ERROR):' \
               | sed -E 's/: .*/: exception details redacted/' \
               | sort -u \
               | while IFS= read -r exception_type; do
                   echo "::error title=Test exception::$exception_type"
+                done
+            sed -nE 's/^[[:space:]]*File ".*\/(apps|config)\/([^"]+)", line ([0-9]+).*/\1\/\2 line \3/p' /tmp/riva-test-output.log \
+              | sort -u \
+              | while IFS= read -r source_frame; do
+                  echo "::error title=Project traceback frame::$source_frame"
                 done
           fi
           exit "$test_status"
