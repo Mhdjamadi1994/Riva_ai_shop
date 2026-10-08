@@ -9,7 +9,10 @@
 [![Celery 5.6](https://img.shields.io/badge/Celery-5.6-37814A?logo=celery)](https://docs.celeryq.dev/)
 [![Docker Compose](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker)](https://docs.docker.com/compose/)
 [![MIT License](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/Mhdjamadi1994/Riva_ai_shop?style=social)](https://github.com/Mhdjamadi1994/Riva_ai_shop/stargazers)
 [![CI](https://github.com/Mhdjamadi1994/Riva_ai_shop/actions/workflows/ci.yml/badge.svg)](https://github.com/Mhdjamadi1994/Riva_ai_shop/actions/workflows/ci.yml)
+
+If Riva is useful to you, consider giving the repository a star.
 
 ## Contents
 
@@ -27,31 +30,37 @@
 
 ## Product tour
 
-Screenshots use sample storefront data. Related views are paired; select any image to view it at full size.
+Follow the shopper journey from the storefront through account access, product discovery, recommendations, and support. Screenshots use sample data; select an image to view it at full size.
 
-### Storefront and catalog
+### 1. Home and account access
 
-| Home | Product discovery |
+| Storefront home | Sign in / register |
 |:---:|:---:|
-| [![Riva storefront home](docs/screenshots/homepage-hero.jpg)](docs/screenshots/homepage-hero.jpg)<br>**Storefront home** — Navigation, hardware-focused hero, and entry points to shopping and assistance. | [![Riva shopping discovery](docs/screenshots/home-shopping-discovery.jpg)](docs/screenshots/home-shopping-discovery.jpg)<br>**Shopping discovery** — Curated sections that guide shoppers into the catalog. |
+| [![Riva storefront home](docs/screenshots/homepage-hero.jpg)](docs/screenshots/homepage-hero.jpg)<br>**Home** — Main navigation and entry points to the store and assistant. | [![Riva sign-in page](docs/screenshots/sign-in-and-registration.jpg)](docs/screenshots/sign-in-and-registration.jpg)<br>**Account access** — Sign in or create an account for account-backed workflows. |
+
+### 2. Browse products
 
 | Graphics cards | Laptops |
 |:---:|:---:|
-| [![Graphics card catalog](docs/screenshots/catalog-graphics-cards.jpg)](docs/screenshots/catalog-graphics-cards.jpg)<br>**Graphics catalog** — Category-focused browsing and product cards. | [![Laptop catalog](docs/screenshots/catalog-laptops.jpg)](docs/screenshots/catalog-laptops.jpg)<br>**Laptop catalog** — Browse listings and compare available hardware. |
+| [![Graphics card catalog](docs/screenshots/catalog-graphics-cards.jpg)](docs/screenshots/catalog-graphics-cards.jpg)<br>**Graphics catalog** — Browse a hardware category and compare product cards. | [![Laptop catalog](docs/screenshots/catalog-laptops.jpg)](docs/screenshots/catalog-laptops.jpg)<br>**Laptop catalog** — Explore available systems and product listings. |
 
-### Assistant, bag, and support
-
-| Product finder | Shopping bag |
+| Gaming PC product page | Store discovery |
 |:---:|:---:|
-| [![Riva AI product finder](docs/screenshots/ai-product-finder.jpg)](docs/screenshots/ai-product-finder.jpg)<br>**Product finder** — Describe a use case or budget for catalog-linked suggestions. | [![Riva shopping bag](docs/screenshots/shopping-bag.jpg)](docs/screenshots/shopping-bag.jpg)<br>**Bag and checkout** — Review chosen products before simulated payment. |
+| [![Gaming PC product detail](docs/screenshots/product-detail-gaming-pc.jpg)](docs/screenshots/product-detail-gaming-pc.jpg)<br>**Product details** — Review a sample gaming PC, price, and add-to-bag actions. | [![Riva shopping discovery](docs/screenshots/home-shopping-discovery.jpg)](docs/screenshots/home-shopping-discovery.jpg)<br>**Curated discovery** — Explore featured paths into the hardware catalog. |
 
-| Account access | Support |
+### 3. Get recommendations and shop
+
+| Riva product finder | Shopping bag |
 |:---:|:---:|
-| [![Sign in and register](docs/screenshots/sign-in-and-registration.jpg)](docs/screenshots/sign-in-and-registration.jpg)<br>**Account access** — Sign in or create an account for account-backed workflows. | [![Riva support center](docs/screenshots/support-center-preview.jpg)](docs/screenshots/support-center-preview.jpg)<br>**Support center** — Submit and track support requests. |
+| [![Riva AI product finder](docs/screenshots/ai-product-finder.jpg)](docs/screenshots/ai-product-finder.jpg)<br>**Product finder** — Describe a use case or budget for catalog-linked suggestions. | [![Riva shopping bag](docs/screenshots/shopping-bag.jpg)](docs/screenshots/shopping-bag.jpg)<br>**Bag and checkout** — Review selected products before simulated payment. |
 
-[![Storefront footer](docs/screenshots/home-page-footer.jpg)](docs/screenshots/home-page-footer.jpg)
+### 4. Get help
 
-The footer links to additional storefront sections and API resources. Screenshots contain no personal account or customer data.
+| Support center | Storefront footer |
+|:---:|:---:|
+| [![Riva support center](docs/screenshots/support-center-preview.jpg)](docs/screenshots/support-center-preview.jpg)<br>**Support** — Submit and track support requests. | [![Storefront footer](docs/screenshots/home-page-footer.jpg)](docs/screenshots/home-page-footer.jpg)<br>**More resources** — Find additional storefront sections and API references. |
+
+Screenshots contain no personal account or customer data.
 
 ## Capabilities
 
