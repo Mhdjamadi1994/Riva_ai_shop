@@ -72,6 +72,12 @@ jobs:
             while IFS= read -r failed_test; do
               echo "::error title=Test failure::$failed_test"
             done < <(grep -E '^(FAIL|ERROR):' /tmp/riva-test-output.log || true)
+            grep -E '^[A-Za-z_][A-Za-z0-9_.]*: ' /tmp/riva-test-output.log \
+              | sed -E 's/: .*/: exception details redacted/' \
+              | sort -u \
+              | while IFS= read -r exception_type; do
+                  echo "::error title=Test exception::$exception_type"
+                done
           fi
           exit "$test_status"
 
