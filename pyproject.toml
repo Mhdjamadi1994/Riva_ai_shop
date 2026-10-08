@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Riva_ai"
+version = "0.1.0"
+description = "AI-assisted computer hardware storefront and shopping recommendation platform"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+license = "MIT"
+dynamic = ["dependencies"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Framework :: Django",
+  "Framework :: Django :: 5.2",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+  "Topic :: Office/Business :: Financial :: Point-of-Sale",
+]
+
+[project.scripts]
+riva-ai = "manage:main"
+
+[tool.setuptools]
+include-package-data = true
+py-modules = ["manage"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["apps*", "config*"]
+
+[tool.setuptools.package-data]
+"apps.storefront" = ["templates/storefront/**/*.html", "static/storefront/**/*"]

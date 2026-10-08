@@ -1,0 +1,32 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Demo payment simulator | Riva</title>
+    <link rel="stylesheet" href="{% static 'storefront/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'storefront/editorial.css' %}" />
+  </head>
+  <body class="storefront-home">
+    <main class="container" style="max-width:560px;padding-block:12vh">
+      <span class="eyebrow">Demo sandbox</span>
+      <h1>Simulated payment</h1>
+      <p>This is a demonstration checkout. It does not collect card details or charge money. Completing it records a simulated payment for this demo order.</p>
+      {% if error %}<p role="alert">{{ error }}</p>{% endif %}
+      <dl>
+        <dt>Order</dt><dd>#{{ payment.order_id }}</dd>
+        <dt>Amount</dt><dd>${{ payment.amount }} {{ payment.currency }}</dd>
+        <dt>Status</dt><dd>{{ payment.get_status_display }}</dd>
+      </dl>
+      {% if payment.status != "paid" %}
+        <form method="post">
+          {% csrf_token %}
+          <button class="button button-primary" type="submit">Simulate successful payment</button>
+        </form>
+      {% else %}
+        <p>This payment has already been completed.</p>
+      {% endif %}
+    </main>
+  </body>
+</html>

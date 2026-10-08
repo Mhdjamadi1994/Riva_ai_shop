@@ -1,0 +1,79 @@
+name: Riva project checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        database: [sqlite, postgresql]
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: ai_shop_db
+          POSTGRES_USER: shopuser
+          POSTGRES_PASSWORD: test-password-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U shopuser -d ai_shop_db"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DEBUG: "True"
+      SECRET_KEY: github-actions-test-key-not-for-deployment
+      ALLOWED_HOSTS: 127.0.0.1,localhost
+      PAYMENT_PROVIDER: mock
+      ALLOW_MOCK_PAYMENTS: "true"
+      ALLOW_UNAUDITED_FX_FALLBACK: "true"
+      DB_ENGINE: ${{ matrix.database }}
+      POSTGRES_DB: ai_shop_db
+      POSTGRES_USER: shopuser
+      POSTGRES_PASSWORD: test-password-only
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: "5432"
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@v7.0.0
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip && python -m pip install -r requirements.txt
+
+      - name: Check Django configuration
+        run: python manage.py check
+
+      - name: Run tests
+        run: python manage.py test --noinput
+
+      - name: Check production security configuration
+        env:
+          DEBUG: "False"
+          SECRET_KEY: synthetic-riva-production-check-key-9b1449bf7de0464988f39f40cc178854-not-a-deployment-secret
+          ALLOWED_HOSTS: shop.example
+          CSRF_TRUSTED_ORIGINS: https://shop.example
+          SECURE_SSL_REDIRECT: "true"
+          SECURE_HSTS_SECONDS: "31536000"
+          SECURE_HSTS_INCLUDE_SUBDOMAINS: "true"
+          SECURE_HSTS_PRELOAD: "true"
+          ALLOW_MOCK_PAYMENTS: "false"
+          ALLOW_UNAUDITED_FX_FALLBACK: "false"
+        run: python manage.py check --deploy
+
+      - name: Build production image
+        run: docker build --tag riva:ci .

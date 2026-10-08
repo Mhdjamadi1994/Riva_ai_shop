@@ -1,0 +1,625 @@
+{% load static %}
+<!doctype html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f7f8f4" />
+  <meta name="description" content="Riva helps you find thoughtful technology with a personal AI shopping assistant, clear product details, and an easy way to compare." />
+  <link rel="icon" type="image/svg+xml" href="{% static 'storefront/images/riva-favicon.svg' %}" />
+  <title>Riva — Thoughtful shopping, made personal</title>
+  <link rel="stylesheet" href="{% static 'storefront/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'storefront/editorial.css' %}" />
+  <script defer src="{% static 'storefront/app.js' %}"></script>
+</head>
+
+<body class="storefront-home" data-currency="{{ shop_currency|escape }}" data-toman-per-usd="{{ toman_per_usd }}" data-open-account="{{ open_account|yesno:'true,false' }}" data-open-cart="{{ open_cart|yesno:'true,false' }}"
+  data-open-section="{{ account_section|default:'profile'|escape }}"
+  data-next-url="{{ request.GET.next|default:''|escape }}">
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-arrow" viewBox="0 0 24 24">
+      <path d="M5 12h14M13 5l7 7-7 7" />
+    </symbol>
+    <symbol id="i-search" viewBox="0 0 24 24">
+      <circle cx="10.8" cy="10.8" r="6.8" />
+      <path d="m16 16 4.5 4.5" />
+    </symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24">
+      <path d="M5 8h14l1 13H4L5 8Z" />
+      <path d="M9 9V6a3 3 0 0 1 6 0v3" />
+    </symbol>
+    <symbol id="i-user" viewBox="0 0 24 24">
+      <circle cx="12" cy="8" r="3.5" />
+      <path d="M4.5 21a7.5 7.5 0 0 1 15 0" />
+    </symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24">
+      <path d="m12 2 1.8 7.2L21 11l-7.2 1.8L12 20l-1.8-7.2L3 11l7.2-1.8L12 2Z" />
+      <path d="m19 15 .9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z" />
+    </symbol>
+    <symbol id="i-chip" viewBox="0 0 24 24">
+      <rect x="6" y="6" width="12" height="12" rx="2" />
+      <path d="M9 2v4m6-4v4M9 18v4m6-4v4M2 9h4m-4 6h4m12-6h4m-4 6h4M9 10h6v4H9z" />
+    </symbol>
+    <symbol id="i-monitor" viewBox="0 0 24 24">
+      <rect x="2" y="3" width="20" height="14" rx="2" />
+      <path d="M8 21h8m-4-4v4m-6-13h12m-12 3h8" />
+    </symbol>
+    <symbol id="i-keyboard" viewBox="0 0 24 24">
+      <rect x="2" y="5" width="20" height="14" rx="2" />
+      <path d="M5 9h1m3 0h1m3 0h1m3 0h1M5 12h1m3 0h1m3 0h1m3 0h1M8 15h8" />
+    </symbol>
+    <symbol id="i-gamepad" viewBox="0 0 24 24">
+      <path
+        d="M7 8h10a5 5 0 0 1 4.7 6.7l-1 2.5a2 2 0 0 1-3.2.7l-2.2-2H8.7l-2.2 2a2 2 0 0 1-3.2-.7l-1-2.5A5 5 0 0 1 7 8Z" />
+      <path d="M7 10v5m-2.5-2.5h5M16.5 11.5h.01M19 14h.01" />
+    </symbol>
+    <symbol id="i-mouse" viewBox="0 0 24 24">
+      <rect x="6" y="2" width="12" height="20" rx="6" />
+      <path d="M12 2v7m-6 0h12" />
+    </symbol>
+    <symbol id="i-headphones" viewBox="0 0 100 100">
+      <path d="M20 54v-5a30 30 0 0 1 60 0v5" />
+      <rect x="15" y="49" width="19" height="34" rx="9" />
+      <rect x="66" y="49" width="19" height="34" rx="9" />
+      <path d="M76 78c-3 9-12 13-25 13" />
+    </symbol>
+    <symbol id="i-watch" viewBox="0 0 100 100">
+      <path d="M39 14h22l6 20v32l-6 20H39l-6-20V34l6-20Z" />
+      <rect x="28" y="33" width="44" height="36" rx="12" />
+      <path d="M50 41v11l8 5" />
+    </symbol>
+    <symbol id="i-shoe" viewBox="0 0 100 100">
+      <path d="M19 61c10-1 19-8 25-22l12 10c7 6 15 9 25 10 6 1 10 6 10 12v7H16v-9c0-4 1-7 3-8Z" />
+      <path d="M17 72h72M44 47l9 8m-17-1 8 4" />
+    </symbol>
+    <symbol id="i-lamp" viewBox="0 0 100 100">
+      <path d="m34 24 32 0 10 27H24l10-27Z" />
+      <path d="M50 51v24m-16 0h32M40 18h20" />
+      <path d="M30 62h40" />
+    </symbol>
+    <symbol id="i-book" viewBox="0 0 24 24">
+      <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17H6.5A2.5 2.5 0 0 1 4 17.5z" />
+      <path d="M4 17.5A2.5 2.5 0 0 1 6.5 15H20M8 7h8" />
+    </symbol>
+    <symbol id="i-coffee" viewBox="0 0 24 24">
+      <path d="M4 8h13v7a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Zm13 2h2a2 2 0 1 1 0 4h-2M7 3v2m5-2v2" />
+    </symbol>
+    <symbol id="i-backpack" viewBox="0 0 24 24">
+      <path d="M7 7a5 5 0 0 1 10 0v2h2v12H5V9h2z" />
+      <path d="M9 7v2h6V7m-8 6h10v5H7zM3 12v5m18-5v5" />
+    </symbol>
+    <symbol id="i-dumbbell" viewBox="0 0 24 24">
+      <path d="M3 9v6m4-9v12m10-12v12m4-9v6M7 12h10" />
+    </symbol>
+    <symbol id="i-close" viewBox="0 0 24 24">
+      <path d="m6 6 12 12M18 6 6 18" />
+    </symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24">
+      <path d="M5 12h14" />
+    </symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24">
+      <path d="M12 5v14M5 12h14" />
+    </symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24">
+      <path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-7.5a7.5 7.5 0 1 1 17 0Z" />
+      <path d="M8 11h.01M12 11h.01M16 11h.01" />
+    </symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24">
+      <path d="M20.8 8.8c0 4.2-8.8 10-8.8 10s-8.8-5.8-8.8-10a4.6 4.6 0 0 1 8.8-1.7 4.6 4.6 0 0 1 8.8 1.7Z" />
+    </symbol>
+    <symbol id="i-bookmark" viewBox="0 0 24 24">
+      <path d="M6 4.8A1.8 1.8 0 0 1 7.8 3h8.4A1.8 1.8 0 0 1 18 4.8V21l-6-4-6 4V4.8Z" />
+    </symbol>
+    <symbol id="i-ticket" viewBox="0 0 24 24">
+      <path d="M4 7a2 2 0 0 0 0 4v2a2 2 0 0 0 0 4h16a2 2 0 0 0 0-4v-2a2 2 0 0 0 0-4H4Z" />
+      <path d="M13 7v2m0 3v2m0 3v1" />
+    </symbol>
+  </svg>
+
+  <div class="announcement"><span class="announcement-dot"></span><span>RIVA PC / BUILD YOUR NEXT SETUP</span><a href="#smart-picks">Get a component recommendation <span aria-hidden="true">↗</span></a></div>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Riva home"><span class="brand-mark">R</span><span class="brand-copy"><strong>RIVA</strong><small>Everyday intelligence</small></span></a>
+    <form class="header-search" id="headerSearch" action="/" method="get" role="search" aria-label="Search products"><input id="headerSearchInput" type="search" name="search" aria-label="Search products" autocomplete="off" /><button type="submit" aria-label="Search"><svg><use href="#i-search" /></svg></button><div class="header-search-suggestions" id="headerSearchSuggestions" hidden aria-live="polite"></div></form>
+    <nav class="main-nav" aria-label="Main navigation"><a class="nav-link" href="#catalog">Shop hardware</a><a class="nav-link" href="#catalog" data-department="pcs">Gaming PCs</a><a class="nav-link" href="#catalog" data-department="gpus">Graphics cards</a><a class="nav-link" href="#catalog" data-department="monitors">Monitors</a><a class="nav-link" href="#contact">Support</a></nav>
+    <div class="header-actions"><button class="account-trigger icon-button" id="accountButton" type="button" aria-label="Open your profile" data-account-trigger="true"><span id="accountLabel">Sign in</span></button><a class="cart-trigger icon-button" id="openCart" href="/cart/" aria-label="Open shopping bag" aria-expanded="false"><svg><use href="#i-bag" /></svg><span class="cart-label">Bag</span><span class="cart-count" id="cartCount">0</span></a></div>
+  </header>
+  <main id="top">
+    <section class="hero page-width" aria-labelledby="heroTitle">
+      <img class="hero-background-image" src="{% static 'storefront/images/riva-home-hero-v2.webp' %}" alt="A bright computer hardware studio with a high-performance PC, modern components, and an organized product workstation" width="1672" height="941" fetchpriority="high" decoding="async" />
+      <div class="hero-shade" aria-hidden="true"></div>
+      <div class="hero-copy reveal">
+        <div class="eyebrow hero-eyebrow"><span class="announcement-dot"></span> YOUR PC & GAMING HARDWARE SHOP</div>
+        <h1 id="heroTitle">Build a setup<br /><em>that plays your way.</em></h1>
+        <p class="hero-description">Explore gaming PCs, graphics cards, processors, displays and the components to bring your build together. Compare clearly and get help choosing compatible parts.</p>
+        <div class="hero-actions"><a class="button button-light" href="#catalog">Shop all hardware <svg><use href="#i-arrow" /></svg></a></div>
+        <div class="hero-proof"><span class="hero-proof-line"></span><span>Components, peripherals and complete gaming builds.</span></div>
+      </div>
+      <div class="hero-insight hero-insight-top"><small><span class="hero-live-dot"></span> PERSONALIZED DISCOVERY</small><strong>Find the right fit,<br />without the noise.</strong></div>
+      <div class="hero-insight hero-insight-bottom"><small>RIVA / YOUR SHORTLIST</small><strong>Ideas shaped around<br />what matters to you.</strong><span>Thoughtful recommendations&nbsp; ↗</span></div>
+      <div class="hero-chapter-strip"><span><b>01</b> Understand what you need</span><span><b>02</b> Explore with context</span><span><b>03</b> Choose with confidence</span></div>
+    </section>
+
+    <section class="benefits page-width" id="about" aria-label="Why shop with Riva">
+      <article class="benefit reveal">
+        <span class="benefit-icon icon-mint"><svg>
+            <use href="#i-search" />
+          </svg></span>
+        <div>
+          <h2>Shop by component</h2>
+          <p>Browse the parts your setup needs.</p>
+        </div>
+      </article>
+      <article class="benefit reveal">
+        <span class="benefit-icon icon-peach"><svg>
+            <use href="#i-spark" />
+          </svg></span>
+        <div>
+          <h2>Compare with confidence</h2>
+          <p>See clear specs, prices and reviews.</p>
+        </div>
+      </article>
+      <article class="benefit reveal">
+        <span class="benefit-icon icon-lilac"><svg>
+            <use href="#i-chat" />
+          </svg></span>
+        <div>
+          <h2>Plan your build</h2>
+          <p>Get component suggestions from Riva.</p>
+        </div>
+      </article>
+    </section>
+
+    <div class="category-ribbon" aria-label="Shop across categories">
+      <div class="ribbon-track" aria-hidden="true">
+        <span>Laptops</span><i>✦</i><span>Keyboards</span><i>✦</i><span>Gaming gear</span><i>✦</i><span>CPUs</span><i>✦</i><span>Graphics cards</span><i>✦</i><span>Memory</span><i>✦</i><span>Monitors</span><i>✦</i><span>Gaming PCs</span><i>✦</i><span>Accessories</span><i>✦</i><span>Other</span><i>✦</i>
+        <span>Laptops</span><i>✦</i><span>Keyboards</span><i>✦</i><span>Gaming gear</span><i>✦</i><span>CPUs</span><i>✦</i><span>Graphics cards</span><i>✦</i><span>Memory</span><i>✦</i><span>Monitors</span><i>✦</i><span>Gaming PCs</span><i>✦</i><span>Accessories</span><i>✦</i><span>Other</span><i>✦</i>
+      </div>
+    </div>
+
+    <section class="catalog-section" id="catalog">
+      <div class="page-width">
+        <div class="section-heading reveal">
+          <div>
+        <span class="eyebrow">A more considered way to shop</span>
+            <h2>PC hardware for <span>your next great setup.</span></h2>
+            <p>Shop computers, core components, monitors and gaming peripherals in one organized catalog.</p>
+          </div>
+          <div class="catalog-count" id="catalogCount" aria-live="polite">
+            Loading the collection…
+          </div>
+        </div>
+        <nav class="category-filters" aria-label="Shop departments">
+          <div class="category-group category-group-all">
+            <a class="category-group-label" href="#catalog" data-department="">Browse all</a>
+            <button class="category-filter is-active" type="button" data-category="">All products</button>
+          </div>
+          <div class="category-group">
+            <a class="category-group-label" href="#catalog" data-department="laptops,pcs">Computers</a>
+            <button class="category-filter" type="button" data-category="laptops">Laptops</button>
+            <button class="category-filter" type="button" data-category="pcs">Gaming PCs</button>
+          </div>
+          <div class="category-group">
+            <a class="category-group-label" href="#catalog" data-department="cpus,gpus,ram,motherboards,storage,power,cooling,cases">Components</a>
+            <button class="category-filter" type="button" data-category="cpus">CPUs</button>
+            <button class="category-filter" type="button" data-category="gpus">Graphics cards</button>
+            <button class="category-filter" type="button" data-category="ram">Memory</button>
+            <button class="category-filter" type="button" data-category="motherboards">Motherboards</button>
+            <button class="category-filter" type="button" data-category="storage">Storage</button>
+            <button class="category-filter" type="button" data-category="power">Power supplies</button>
+            <button class="category-filter" type="button" data-category="cooling">Cooling</button>
+            <button class="category-filter" type="button" data-category="cases">PC cases</button>
+          </div>
+          <div class="category-group">
+            <a class="category-group-label" href="#catalog" data-department="monitors,keyboards,gaming,accessories">Peripherals</a>
+            <button class="category-filter" type="button" data-category="monitors">Monitors</button>
+            <button class="category-filter" type="button" data-category="keyboards">Keyboards</button>
+            <button class="category-filter" type="button" data-category="gaming">Gaming gear</button>
+          </div>
+          <div class="category-group">
+            <a class="category-group-label" href="#catalog" data-department="other">More</a>
+            <button class="category-filter" type="button" data-category="accessories">Accessories</button>
+            <button class="category-filter" type="button" data-category="other">Other</button>
+          </div>
+        </nav>
+        <div class="catalog-layout">
+          <aside class="catalog-refinements" aria-label="Refine products">
+            <div class="refinements-heading">
+              <span class="eyebrow">Refine results</span><button class="refinements-clear" id="clearFilters"
+                type="button">
+                Clear all
+              </button>
+            </div>
+            <form id="catalogFilters" class="refinements-form">
+              <fieldset>
+                <legend>Price range (USD)</legend>
+                <div class="price-range-inputs">
+                  <label><span>From</span><input id="priceMin" name="price_min" type="number" min="0" step="any"
+                      inputmode="decimal" placeholder="0" /></label><label><span>To</span><input id="priceMax"
+                      name="price_max" type="number" min="0" step="any" inputmode="decimal"
+                      placeholder="No limit" /></label>
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>Customer rating</legend>
+                <label class="rating-filter"><input id="minRating" name="min_rating" type="checkbox" value="4" /><span>4
+                    stars &amp; up</span></label>
+              </fieldset>
+              <button class="button button-outline button-wide" type="submit">
+                Apply filters
+              </button>
+            </form>
+          </aside>
+          <div class="catalog-results">
+            <div class="catalog-toolbar">
+              <form class="search-box" id="searchForm" role="search">
+                <svg>
+                  <use href="#i-search" />
+                </svg><input id="searchInput" type="search" name="search" placeholder="What are you looking for?"
+                  autocomplete="off" aria-label="Search products" /><button type="submit">Search</button>
+              </form>
+              <label class="sort-control"><span>Sort by</span><select id="sortSelect" aria-label="Sort products">
+                  <option value="-created_at">Recently added</option>
+                  <option value="-average_rating">Top rated</option>
+                  <option value="price">Price: low to high</option>
+                  <option value="-price">Price: high to low</option>
+                  <option value="name">Name</option>
+                </select></label>
+            </div>
+            <div class="product-grid" id="productGrid" aria-live="polite" aria-busy="true"></div>
+            <div class="catalog-state" id="catalogState" hidden></div>
+            <div class="pagination" id="pagination" hidden>
+              <button class="button button-outline" id="previousPage" type="button">
+                Previous</button><span id="pageLabel"></span><button class="button button-outline" id="nextPage"
+                type="button">
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="feature-banner page-width reveal" aria-labelledby="featureTitle">
+      <div class="feature-art" aria-hidden="true"><span></span><span></span><span></span><i></i></div>
+      <div class="feature-overlay"></div>
+      <div class="feature-copy">
+        <span class="eyebrow eyebrow-light">A little more clarity, at every step</span>
+        <h2 id="featureTitle">
+          A better way to choose,<br /><span>made personal.</span>
+        </h2>
+        <p>From a focused shortlist to the product details that matter, Riva helps you make your next choice with more clarity.</p>
+        <a class="button button-light" href="#catalog">Explore the collection <svg>
+            <use href="#i-arrow" />
+          </svg></a>
+      </div>
+      <span class="feature-index">RIVA / A MORE THOUGHTFUL SHOP</span>
+    </section>
+
+    <section class="recommend-section" id="smart-picks">
+      <div class="page-width recommendation-panel reveal">
+        <div class="recommend-art" aria-hidden="true">
+          <div class="recommend-orbit"></div>
+          <span class="recommend-spark spark-a">✳</span><span class="recommend-spark spark-b">✦</span>
+          <div class="recommend-note">
+            <svg>
+              <use href="#i-spark" />
+            </svg><span>Made for what matters to you</span>
+          </div>
+        </div>
+        <div class="recommend-copy">
+          <span class="eyebrow eyebrow-light">A thoughtful companion for every choice</span>
+          <h2>Tell Riva what matters.<br /><span>Start with the right fit.</span></h2>
+          <p>Share what you are looking for. Riva will bring back relevant options from the collection and explain what makes each one worth a look.</p>
+          <form id="recommendForm" class="recommend-form">
+            <input id="recommendInput" type="text" maxlength="1000"
+              placeholder="For example: a laptop for creative work and travel"
+              aria-label="Describe what you are looking for" /><button type="submit">
+              Find my fit <svg>
+                <use href="#i-arrow" />
+              </svg>
+            </button>
+          </form>
+          <div class="recommend-message" id="recommendMessage" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="page-width recommendation-results" id="recommendationResults" hidden></div>
+    </section>
+
+    <section class="contact-section page-width" id="contact" aria-labelledby="contactTitle">
+      <div class="contact-heading">
+        <div>
+          <span class="eyebrow">PERSONAL HELP, WHEN YOU NEED IT</span>
+          <h2 id="contactTitle">Here when you need us.</h2>
+        </div>
+        <p>Clear answers, thoughtful product advice, and a real support team ready to help.</p>
+      </div>
+      <div class="contact-grid">
+        <article class="contact-card contact-telegram">
+          <span class="contact-icon"><svg><use href="#i-chat" /></svg></span>
+          <span class="contact-status{% if telegram_available %} is-ready{% endif %}"><i></i>{% if telegram_available %}Telegram assistant{% else %}Telegram setup pending{% endif %}</span>
+          <h3>Riva on Telegram</h3>
+          <p>The Telegram bot answers product questions using the shop catalog and its assistant safety filters.</p>
+          {% if telegram_available %}
+          <a class="contact-link" href="{{ telegram_url }}" target="_blank" rel="noopener">Open Telegram assistant <svg><use href="#i-arrow" /></svg></a>
+          {% else %}
+          <a class="contact-link" href="/support/">Open support center <svg><use href="#i-arrow" /></svg></a>
+          {% endif %}
+        </article>
+        <article class="contact-card contact-ticket">
+          <span class="contact-icon"><svg>
+              <use href="#i-ticket" />
+            </svg></span><span class="contact-status is-ready"><i></i> Customer care</span>
+          <h3>Talk to a real support team.</h3>
+          <p>
+            Open a private ticket, follow replies, or continue to the Telegram
+            assistant when it is configured.
+          </p>
+          <a class="contact-link" href="/support/">Contact customer support <svg>
+              <use href="#i-arrow" />
+            </svg></a>
+        </article>
+      </div>
+    </section>
+
+    <section class="ing-section page-width reveal">
+      <div class="closing-copy">
+        <span class="eyebrow">A thoughtful place to begin</span>
+        <h2>Find the right fit<br /><span>and feel good about it.</span></h2>
+        <p>Explore the collection at your own pace. Compare specifications, availability and prices before you choose.</p>
+      </div>
+      <div class="closing-actions">
+        <a class="button button-primary" href="#catalog">Back to the collection <svg>
+            <use href="#i-arrow" />
+          </svg></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-width footer-inner">
+      <a class="brand brand-footer" href="#top"><span class="brand-mark">R</span><span
+          class="brand-copy"><strong>RIVA</strong><small>Everyday intelligence</small></span></a>
+      <p>Thoughtful technology, chosen with care.</p>
+      <div class="footer-links">
+        <a href="/api/docs/">API documentation</a><a href="/admin/">Store administration</a><a href="#contact">Contact &
+          Telegram</a>
+      </div>
+      <span class="copyright">© Riva</span>
+    </div>
+  </footer>
+
+  <div class="backdrop" id="backdrop" hidden></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-labelledby="cartTitle" aria-hidden="true" inert>
+    <div class="drawer-header">
+      <div>
+        <span class="eyebrow">Your selection</span>
+        <h2 id="cartTitle">Shopping bag</h2>
+      </div>
+      <button class="icon-button close-button" type="button" data-close-drawer aria-label="Close bag">
+        <svg>
+          <use href="#i-close" />
+        </svg>
+      </button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-empty" id="cartEmpty">
+      <span class="empty-bag"><svg>
+          <use href="#i-bag" />
+        </svg></span>
+      <h3>Your bag is taking a break.</h3>
+      <p>Add something you like and it will be waiting here.</p>
+      <button class="button button-outline" type="button" data-close-drawer>
+        Explore products
+      </button>
+    </div>
+    <div class="cart-summary" id="cartSummary" hidden>
+      <div class="summary-line">
+        <span>Subtotal</span><strong id="cartTotal"></strong>
+      </div>
+      <p>USD prices are estimates based on the configured exchange rate. Final delivery details and pricing are confirmed after your request.</p>
+      <button class="button button-primary button-wide" id="checkoutButton" type="button">
+        Continue to details <svg>
+          <use href="#i-arrow" />
+        </svg></button><small>Online payment is not enabled in this version.</small>
+    </div>
+  </aside>
+
+  <!-- Auth Dialog -->
+  <dialog id="authDialog" aria-labelledby="authTitle">
+    <div class="auth-dialog-inner">
+      <button class="auth-close-btn" type="button" data-close-auth aria-label="Close">×</button>
+      <span class="eyebrow">WELCOME TO RIVA</span>
+      <h2 id="authTitle">Sign in</h2>
+      <p id="authDescription">Sign in to chat with the assistant and submit an order.</p>
+      <div class="auth-tabs" role="tablist">
+        <button type="button" data-auth-mode="login" role="tab" aria-selected="true" class="auth-tab is-active">Sign in</button>
+        <button type="button" data-auth-mode="register" role="tab" aria-selected="false" class="auth-tab">Create account</button>
+      </div>
+      <form id="authForm" class="form-stack" data-mode="login">
+        <label>Username<input name="username" type="text" autocomplete="username" required /></label>
+        <label class="register-only" hidden>Email<input name="email" type="email" autocomplete="email" /></label>
+        <label class="register-only" hidden>International phone number<input name="phone" type="tel" inputmode="tel" pattern="\+[1-9][0-9]{7,14}" maxlength="16" autocomplete="tel" placeholder="International number" /></label>
+        <label>Password<span class="password-control"><input id="authPassword" name="password" type="password" autocomplete="current-password" required /><button id="toggleAuthPassword" type="button" aria-label="Show password" aria-pressed="false">Show</button></span></label>
+        <button class="button button-primary button-wide" id="authSubmit" type="submit"><span id="authSubmitText">Sign in</span></button>
+        <p class="form-message" id="authMessage" aria-live="polite"></p>
+      </form>
+    </div>
+  </dialog>
+  <dialog class="modal checkout-modal" id="checkoutDialog" aria-labelledby="checkoutTitle">
+    <button class="modal-close icon-button" type="button" data-close-dialog aria-label="Close">
+      <svg>
+        <use href="#i-close" />
+      </svg>
+    </button>
+    <span class="eyebrow">One last step</span>
+    <h2 id="checkoutTitle">Delivery details</h2>
+    <p class="modal-description">
+      Your request will be saved and our store team will contact you to
+      coordinate.
+    </p>
+    <form id="checkoutForm" class="form-stack">
+      <label>Full name<input name="full_name" type="text" minlength="2" maxlength="120" autocomplete="name"
+          required /></label>
+      <label>International phone number<input name="phone" type="tel" inputmode="tel" pattern="\+[1-9][0-9]{7,14}"
+          maxlength="16" autocomplete="tel" placeholder="+15550101234" required /></label>
+      <label>Full address<textarea name="address" rows="3" minlength="8" maxlength="1200" autocomplete="street-address"
+          required></textarea>
+      </label>
+      <div class="checkout-total">
+        <span>Subtotal</span><strong id="checkoutTotal"></strong>
+      </div>
+      <button class="button button-primary button-wide" type="submit">
+        Continue to secure payment <svg>
+          <use href="#i-arrow" />
+        </svg>
+      </button>
+      <p class="form-message" id="checkoutMessage" aria-live="polite"></p>
+    </form>
+  </dialog>
+
+  <dialog class="modal orders-modal" id="ordersDialog" aria-labelledby="ordersTitle">
+    <button class="modal-close icon-button" type="button" data-close-dialog aria-label="Close">
+      <svg>
+        <use href="#i-close" />
+      </svg>
+    </button>
+    <span class="eyebrow">Your private account</span>
+    <h2 id="ordersTitle">Your account</h2>
+    <div class="account-summary" id="accountSummary" aria-live="polite">
+      Loading your account…
+    </div>
+    <div class="account-tabs" role="tablist" aria-label="Account sections">
+      <button class="account-tab is-active" type="button" data-account-tab="profile" role="tab" aria-selected="true">
+        Profile
+      </button>
+      <button class="account-tab" type="button" data-account-tab="orders" role="tab" aria-selected="false">
+        Orders
+      </button>
+      <button class="account-tab" type="button" data-account-tab="payments" role="tab" aria-selected="false">
+        Payments
+      </button>
+      <button class="account-tab" type="button" data-account-tab="wallet" role="tab" aria-selected="false">
+        Wallet
+      </button>
+      <button class="account-tab" type="button" data-account-tab="liked" role="tab" aria-selected="false">
+        Liked
+      </button>
+      <button class="account-tab" type="button" data-account-tab="saved" role="tab" aria-selected="false">
+        Saved
+      </button>
+      <button class="account-tab" type="button" data-account-tab="support" role="tab" aria-selected="false">
+        Support
+      </button>
+    </div>
+    <section class="account-pane" id="accountProfilePane" data-account-pane="profile">
+      <form id="profileForm" class="form-stack account-profile-form">
+        <label>Username<input name="username" type="text" readonly /></label>
+        <label>Email<input name="email" type="email" readonly /></label>
+        <label>Display name<input name="display_name" type="text" maxlength="120" autocomplete="name" /></label>
+        <label>Phone number<input name="phone" type="tel" inputmode="tel" placeholder="International number"
+            pattern="\+[1-9][0-9]{7,14}" maxlength="16" autocomplete="tel" required /></label>
+        <label>Delivery address<textarea name="address" rows="3" maxlength="1200"
+            autocomplete="street-address"></textarea>
+        </label>
+        <button class="button button-primary button-wide" type="submit">
+          Save profile
+        </button>
+        <p class="form-message" id="profileMessage" aria-live="polite"></p>
+        <button class="button button-quiet button-wide" id="signOutButton" type="button">
+          Sign out
+        </button>
+      </form>
+    </section>
+    <section class="account-pane" id="accountOrdersPane" data-account-pane="orders" hidden>
+      <div class="orders-list" id="ordersList"></div>
+    </section>
+    <section class="account-pane" id="accountPaymentsPane" data-account-pane="payments" hidden>
+      <div class="account-record-list" id="paymentsList"></div>
+    </section>
+    <section class="account-pane" id="accountWalletPane" data-account-pane="wallet" hidden>
+      <div class="wallet-card">
+        <span>Available balance</span><strong id="walletBalance">—</strong><small id="walletCurrency"></small>
+      </div>
+      <p class="wallet-note">
+        Wallet funding and crypto checkout become available after a payment
+        provider is configured.
+      </p>
+      <h3>Wallet activity</h3>
+      <div class="account-record-list" id="walletTransactions"></div>
+    </section>
+    <section class="account-pane" data-account-pane="liked" hidden>
+      <div class="account-record-list" id="likedProducts"></div>
+    </section>
+    <section class="account-pane" data-account-pane="saved" hidden>
+      <div class="account-record-list" id="savedProducts"></div>
+    </section>
+    <section class="account-pane" data-account-pane="support" hidden>
+      <div class="support-intro">
+        <span class="eyebrow">CUSTOMER CARE</span>
+        <h3>We’re here to help.</h3>
+        <p>Open a ticket and check replies from the store team here.</p>
+        <a class="button button-outline" href="/support/">Open support center <svg>
+            <use href="#i-arrow" />
+          </svg></a>
+      </div>
+      <form id="supportTicketForm" class="form-stack support-ticket-form">
+        <label>Subject<input name="subject" type="text" minlength="4" maxlength="140"
+            placeholder="Order question, product help…" required /></label><label>How can we help?<textarea
+            name="message" rows="4" minlength="10" maxlength="5000"
+            placeholder="Describe the issue or question in a few sentences." required></textarea></label><button
+          class="button button-primary" type="submit">
+          Send support request <svg>
+            <use href="#i-arrow" />
+          </svg>
+        </button>
+        <p class="form-message" id="supportTicketMessage" aria-live="polite"></p>
+      </form>
+      <h3>Your support requests</h3>
+      <div class="account-record-list" id="supportTickets"></div>
+    </section>
+  </dialog>
+
+  <section class="chat-panel" id="chatPanel" aria-label="Chat with the shopping assistant" aria-hidden="true" inert>
+    <div class="chat-header">
+      <span class="chat-avatar"><svg>
+          <use href="#i-spark" />
+        </svg></span>
+      <div>
+        <strong>Riva Assistant</strong><small><span class="online-dot"></span> Ready to help you choose</small>
+      </div>
+      <button class="icon-button close-button" type="button" id="closeChat" aria-label="Close chat">
+        <svg>
+          <use href="#i-close" />
+        </svg>
+      </button>
+    </div>
+    <div class="chat-messages" id="chatMessages" aria-live="polite">
+      <div class="chat-bubble assistant-bubble">
+        Hi! Tell me what you need and I’ll look through the available
+        collection.
+      </div>
+    </div>
+    <form class="chat-form" id="chatForm">
+      <label class="sr-only" for="chatInput">Message the assistant</label><input id="chatInput" type="text"
+        maxlength="8000" placeholder="Write your message…" autocomplete="off" required /><button type="submit"
+        aria-label="Send message">
+        <svg>
+          <use href="#i-arrow" />
+        </svg>
+      </button>
+    </form>
+    <small class="chat-footnote">Answers may be incomplete. Check product details in the
+      collection.</small>
+  </section>
+  <button class="chat-fab" id="chatFab" type="button" data-open-chat aria-label="Chat with the Riva assistant">
+    <svg>
+      <use href="#i-chat" />
+    </svg><span>Ask Riva</span>
+  </button>
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- TEMPLATE_MARKER_123 -->
+</body>
+
+</html>

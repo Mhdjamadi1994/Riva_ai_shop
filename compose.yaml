@@ -1,0 +1,157 @@
+services:
+  web:
+    image: ${DOCKERHUB_NAMESPACE:-local}/ai-shop-assistant-web:${IMAGE_TAG:-latest}
+    build: .
+    env_file: .env
+    environment:
+      DB_ENGINE: postgresql
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      REDIS_URL: redis://redis:6379/0
+      QDRANT_URL: http://qdrant:6333
+      BACKUP_DIR: /app/backups
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1,web}
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+      gunicorn --bind 0.0.0.0:8000 config.wsgi:application"
+    ports:
+      - "127.0.0.1:${RIVA_BIND_PORT:-8011}:8000"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health/', timeout=3)",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - backup_data:/app/backups
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+    restart: unless-stopped
+
+  worker:
+    image: ${DOCKERHUB_NAMESPACE:-local}/ai-shop-assistant-worker:${IMAGE_TAG:-latest}
+    build: .
+    env_file: .env
+    environment:
+      DB_ENGINE: postgresql
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      REDIS_URL: redis://redis:6379/0
+      QDRANT_URL: http://qdrant:6333
+      BACKUP_DIR: /app/backups
+      ALLOWED_HOSTS: localhost,127.0.0.1,web,worker
+    command: celery -A config worker --loglevel=INFO --events
+    volumes:
+      - backup_data:/app/backups
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import subprocess,sys; r=subprocess.run(['celery','-A','config','inspect','ping','--timeout=4'],capture_output=True,text=True); sys.exit(0 if r.returncode == 0 and 'pong' in r.stdout else 1)",
+        ]
+      interval: 30s
+      timeout: 8s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  beat:
+    image: ${DOCKERHUB_NAMESPACE:-local}/ai-shop-assistant-beat:${IMAGE_TAG:-latest}
+    build: .
+    env_file: .env
+    environment:
+      DB_ENGINE: postgresql
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      REDIS_URL: redis://redis:6379/0
+      QDRANT_URL: http://qdrant:6333
+      BACKUP_DIR: /app/backups
+      ALLOWED_HOSTS: localhost,127.0.0.1,beat
+    command: celery -A config beat --loglevel=INFO --schedule /app/beat/celerybeat-schedule
+    volumes:
+      - beat_data:/app/beat
+      - backup_data:/app/backups
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import sys; p=open('/proc/1/cmdline','rb').read(); sys.exit(0 if b'celery' in p and b'beat' in p else 1)",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB in .env}
+      POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    ports:
+      - "127.0.0.1:${RIVA_POSTGRES_BIND_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  qdrant:
+    image: qdrant/qdrant:v1.19.1
+    volumes:
+      - qdrant_data:/qdrant/storage
+    ports:
+      - "127.0.0.1:6333:6333"
+    restart: unless-stopped
+
+volumes:
+  # Kept so an existing SQLite data volume remains available as a migration archive.
+  sqlite_data:
+  postgres_data:
+  redis_data:
+  qdrant_data:
+  beat_data:
+  backup_data:

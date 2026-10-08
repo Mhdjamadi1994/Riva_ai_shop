@@ -1,0 +1,63 @@
+<section
+  class="chat-panel"
+  id="assistantWidgetPanel"
+  aria-label="Chat with Riva shopping assistant"
+  aria-hidden="true"
+  inert
+>
+  <div class="chat-header">
+    <span class="chat-avatar"
+      ><svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="m12 2 1.8 7.2L21 11l-7.2 1.8L12 20l-1.8-7.2L3 11l7.2-1.8L12 2Z"
+        /></svg
+    ></span>
+    <div>
+      <strong>Riva Assistant</strong
+      ><small
+        ><span class="online-dot"></span> Product help and compatibility</small
+      >
+    </div>
+    <button
+      class="icon-button close-button"
+      type="button"
+      id="assistantWidgetClose"
+      aria-label="Close chat"
+    >
+      ×
+    </button>
+  </div>
+  <div class="chat-messages" id="assistantWidgetMessages" aria-live="polite">
+    <div class="chat-bubble assistant-bubble">
+      Tell me what you’re looking for and I’ll search the shop catalog.
+    </div>
+  </div>
+  <form class="chat-form" id="assistantWidgetForm">
+    <label class="sr-only" for="assistantWidgetInput">Message Riva</label
+    ><input
+      id="assistantWidgetInput"
+      type="text"
+      maxlength="8000"
+      placeholder="Ask about a product..."
+      autocomplete="off"
+      required
+    /><button type="submit" aria-label="Send message">
+      <svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+    </button>
+  </form>
+  <small class="chat-footnote"
+    >Product details are checked against the current catalog.</small
+  >
+</section>
+<button
+  class="chat-fab"
+  id="assistantWidgetOpen"
+  type="button"
+  data-open-assistant
+  aria-label="Ask Riva"
+>
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-7.5a7.5 7.5 0 1 1 17 0Z" />
+    <path d="M8 11h.01M12 11h.01M16 11h.01" /></svg
+  ><span>Ask Riva</span>
+</button>

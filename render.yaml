@@ -1,0 +1,225 @@
+# Render Blueprint for a persistent, end-to-end Riva demo.
+# Review the plans and estimated charges in Render before applying this Blueprint.
+services:
+  - type: web
+    name: riva-ai-shop-demo
+    runtime: docker
+    plan: 0.5c-512mb
+    autoDeployTrigger: checksPass
+    healthCheckPath: /api/health/
+    preDeployCommand: python manage.py migrate --noinput && python manage.py seed_demo_catalog
+    dockerCommand: >-
+      sh -c 'exec gunicorn --bind "0.0.0.0:${PORT:-10000}" --workers 1 config.wsgi:application'
+    envVars:
+      - key: DEBUG
+        value: "false"
+      - key: DEMO_MODE
+        value: "true"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        fromService:
+          type: web
+          name: riva-ai-shop-demo
+          envVarKey: RENDER_EXTERNAL_HOSTNAME
+      - key: CSRF_TRUSTED_ORIGINS
+        fromService:
+          type: web
+          name: riva-ai-shop-demo
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: TRUST_PROXY_SSL
+        value: "true"
+      - key: SECURE_SSL_REDIRECT
+        value: "true"
+      - key: DB_ENGINE
+        value: postgresql
+      - key: POSTGRES_HOST
+        fromDatabase:
+          name: riva-ai-shop-db
+          property: host
+      - key: POSTGRES_PORT
+        fromDatabase:
+          name: riva-ai-shop-db
+          property: port
+      - key: POSTGRES_DB
+        fromDatabase:
+          name: riva-ai-shop-db
+          property: database
+      - key: POSTGRES_USER
+        fromDatabase:
+          name: riva-ai-shop-db
+          property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: riva-ai-shop-db
+          property: password
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: riva-ai-shop-queue
+          property: connectionString
+      - key: TIME_ZONE
+        value: UTC
+      - key: PUBLIC_SITE_URL
+        fromService:
+          type: web
+          name: riva-ai-shop-demo
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: PAYMENT_PROVIDER
+        value: mock
+      - key: ALLOW_MOCK_PAYMENTS
+        value: "true"
+      - key: ALLOW_UNAUDITED_FX_FALLBACK
+        value: "true"
+      - key: TOMAN_PER_USD
+        value: "265900"
+      - key: DATABASE_BACKUP_ENABLED
+        value: "false"
+      - key: BACKUP_RESTORE_TEST_ENABLED
+        value: "false"
+      - key: ADMIN_DAILY_REPORT_ENABLED
+        value: "true"
+      - key: EMAIL_BACKEND
+        value: django.core.mail.backends.locmem.EmailBackend
+
+  - type: worker
+    name: riva-ai-shop-worker
+    runtime: docker
+    plan: 0.5c-512mb
+    autoDeployTrigger: checksPass
+    dockerCommand: celery -A config worker --loglevel=INFO --events
+    envVars:
+      - key: DEBUG
+        value: "false"
+      - key: DEMO_MODE
+        value: "true"
+      - key: SECRET_KEY
+        fromService:
+          type: web
+          name: riva-ai-shop-demo
+          envVarKey: SECRET_KEY
+      - key: ALLOWED_HOSTS
+        value: localhost
+      - key: DB_ENGINE
+        value: postgresql
+      - key: POSTGRES_HOST
+        fromDatabase:
+          name: riva-ai-shop-db
+          property: host
+      - key: POSTGRES_PORT
+        fromDatabase:
+          name: riva-ai-shop-db
+          property: port
+      - key: POSTGRES_DB
+        fromDatabase:
+          name: riva-ai-shop-db
+          property: database
+      - key: POSTGRES_USER
+        fromDatabase:
+          name: riva-ai-shop-db
+          property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: riva-ai-shop-db
+          property: password
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: riva-ai-shop-queue
+          property: connectionString
+      - key: TIME_ZONE
+        value: UTC
+      - key: PAYMENT_PROVIDER
+        value: mock
+      - key: ALLOW_MOCK_PAYMENTS
+        value: "true"
+      - key: ALLOW_UNAUDITED_FX_FALLBACK
+        value: "true"
+      - key: TOMAN_PER_USD
+        value: "265900"
+      - key: DATABASE_BACKUP_ENABLED
+        value: "false"
+      - key: BACKUP_RESTORE_TEST_ENABLED
+        value: "false"
+      - key: ADMIN_DAILY_REPORT_ENABLED
+        value: "true"
+      - key: EMAIL_BACKEND
+        value: django.core.mail.backends.locmem.EmailBackend
+
+  - type: worker
+    name: riva-ai-shop-beat
+    runtime: docker
+    plan: 0.5c-512mb
+    autoDeployTrigger: checksPass
+    dockerCommand: celery -A config beat --loglevel=INFO --schedule /tmp/celerybeat-schedule
+    envVars:
+      - key: DEBUG
+        value: "false"
+      - key: DEMO_MODE
+        value: "true"
+      - key: SECRET_KEY
+        fromService:
+          type: web
+          name: riva-ai-shop-demo
+          envVarKey: SECRET_KEY
+      - key: ALLOWED_HOSTS
+        value: localhost
+      - key: DB_ENGINE
+        value: postgresql
+      - key: POSTGRES_HOST
+        fromDatabase:
+          name: riva-ai-shop-db
+          property: host
+      - key: POSTGRES_PORT
+        fromDatabase:
+          name: riva-ai-shop-db
+          property: port
+      - key: POSTGRES_DB
+        fromDatabase:
+          name: riva-ai-shop-db
+          property: database
+      - key: POSTGRES_USER
+        fromDatabase:
+          name: riva-ai-shop-db
+          property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: riva-ai-shop-db
+          property: password
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: riva-ai-shop-queue
+          property: connectionString
+      - key: TIME_ZONE
+        value: UTC
+      - key: PAYMENT_PROVIDER
+        value: mock
+      - key: ALLOW_MOCK_PAYMENTS
+        value: "true"
+      - key: ALLOW_UNAUDITED_FX_FALLBACK
+        value: "true"
+      - key: TOMAN_PER_USD
+        value: "265900"
+      - key: DATABASE_BACKUP_ENABLED
+        value: "false"
+      - key: BACKUP_RESTORE_TEST_ENABLED
+        value: "false"
+      - key: ADMIN_DAILY_REPORT_ENABLED
+        value: "true"
+      - key: EMAIL_BACKEND
+        value: django.core.mail.backends.locmem.EmailBackend
+
+  - type: keyvalue
+    name: riva-ai-shop-queue
+    plan: 256mb
+    persistenceMode: journal-snapshot
+    ipAllowList: []
+
+databases:
+  - name: riva-ai-shop-db
+    postgresMajorVersion: "16"
+    databaseName: riva_ai_shop
+    user: riva_ai_shop
+    plan: basic-256mb
+    ipAllowList: []

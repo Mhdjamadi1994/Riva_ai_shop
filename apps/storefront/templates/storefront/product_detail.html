@@ -1,0 +1,168 @@
+{% load static %}
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="{{ product.name|escape }} product details, ratings, and customer reviews at Riva."
+    />
+    <title>{{ product.name|escape }} | Riva | Thoughtful shopping</title>
+    <link rel="icon" type="image/svg+xml" href="{% static 'storefront/images/riva-favicon.svg' %}" />
+    <link rel="stylesheet" href="{% static 'storefront/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'storefront/editorial.css' %}" />
+    <script defer src="{% static 'storefront/product_detail.js' %}"></script>
+    <script defer src="{% static 'storefront/assistant_widget.js' %}"></script>
+  </head>
+  <body
+    data-currency="{{ shop_currency|escape }}"
+    data-toman-per-usd="{{ toman_per_usd }}"
+    data-product-id="{{ product.id }}"
+    data-product-name="{{ product.name|escape }}"
+    data-product-price="{{ product.price }}"
+    data-product-category="{{ product.category|escape }}"
+    data-product-image="{{ product_image_url|escape }}"
+    data-product-in-stock="{{ product_in_stock|yesno:'true,false' }}"
+    data-average-rating="{{ average_rating|default_if_none:'' }}"
+    data-review-count="{{ review_count }}"
+  >
+    <div class="announcement">
+      <span class="announcement-dot"></span
+      ><span>Thoughtful technology, chosen with care</span
+      ><a href="/#catalog">Explore the collection</a>
+    </div>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Riva home"
+        ><span class="brand-mark">R</span
+        ><span class="brand-copy"
+          ><strong>RIVA</strong><small>Everyday intelligence</small></span
+        ></a
+      >
+      <form class="header-search" action="/" method="get" role="search">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <circle cx="10.8" cy="10.8" r="6.8" />
+          <path d="m16 16 4.5 4.5" /></svg
+        ><input
+          type="search"
+          name="search"
+          placeholder="Search the collection"
+          aria-label="Search the shop"
+        /><button type="submit" aria-label="Search">Search</button>
+      </form>
+      <nav class="main-nav" aria-label="Main navigation"><a class="nav-link" href="/#top">Home life</a><a class="nav-link" href="/#catalog">Engineering</a><a class="nav-link" href="/#smart-picks">Intelligence</a><a class="nav-link" href="/#contact">Safety</a><a class="nav-link" href="/#about">Specs</a></nav>
+      <div class="header-actions">
+        <a
+          class="account-trigger icon-button"
+          href="/account/"
+          aria-label="Open your profile"
+          >Profile</a
+        ><a
+          class="cart-trigger icon-button"
+          href="/cart/"
+          aria-label="Open shopping bag"
+          >Bag</a
+        >
+      </div>
+    </header>
+    <main class="page-width">
+      <p class="eyebrow">
+        <a href="/#catalog">Shop</a> / {{ product.get_category_display|escape }}
+      </p>
+      <section class="product-detail" aria-labelledby="productTitle">
+        <div class="product-detail-image product-detail-art art-{{ product.category|escape }}">
+          <img src="{{ product_image_url|escape }}" alt="{{ product.name|escape }}" width="800" height="650" fetchpriority="high" />
+        </div>
+        <div class="product-detail-copy">
+          <span class="eyebrow">{{ product.get_category_display|escape }}</span>
+          <h1 id="productTitle">{{ product.name|escape }}</h1>
+          <div class="product-rating-preview">
+            <span id="detailRating"
+              >{% if average_rating %}{{ average_rating|floatformat:1 }} / 5{%
+              else %}Not rated yet{% endif %}</span
+            >
+            · <span id="detailReviewCount">{{ review_count }}</span> reviews
+          </div>
+          <p>{{ product.description|linebreaksbr }}</p>
+          <strong class="product-detail-price" id="productDetailPrice" data-toman-price="{{ product.price }}"
+            >${{ product_price_usd|floatformat:2 }} USD</strong
+          >
+          <div class="product-detail-actions">
+            <button
+              class="button button-primary"
+              id="detailAddToCart"
+              type="button"
+            >
+              Add to bag</button
+            ><a class="button button-outline" href="/cart/">Open bag</a>
+          </div>
+          <div class="detail-engagement">
+            <button type="button" id="detailLike" aria-pressed="false">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path
+                  d="M20.8 8.8c0 4.2-8.8 10-8.8 10s-8.8-5.8-8.8-10a4.6 4.6 0 0 1 8.8-1.7 4.6 4.6 0 0 1 8.8 1.7Z"
+                /></svg
+              ><span>Like</span
+              ><b id="detailLikeCount">{{ product.likes.count }}</b></button
+            ><button type="button" id="detailSave" aria-pressed="false">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path
+                  d="M6 4.8A1.8 1.8 0 0 1 7.8 3h8.4A1.8 1.8 0 0 1 18 4.8V21l-6-4-6 4V4.8Z"
+                /></svg
+              ><span>Save</span
+              ><b id="detailSaveCount">{{ product.favorites.count }}</b>
+            </button>
+          </div>
+          <p class="form-message" id="engagementMessage" aria-live="polite"></p>
+        </div>
+      </section>
+      <section class="detail-reviews" aria-labelledby="reviewsTitle">
+        <h2 id="reviewsTitle">Ratings & reviews</h2>
+        <p class="modal-description">
+          Share a useful note about fit, performance, or compatibility. You can
+          update your own review later.
+        </p>
+        <form id="reviewForm" class="review-form">
+          <label
+            >Your rating<select name="rating" required>
+              <option value="5">5 · Excellent</option>
+              <option value="4">4 · Very good</option>
+              <option value="3">3 · Good</option>
+              <option value="2">2 · Fair</option>
+              <option value="1">1 · Poor</option>
+            </select></label
+          >
+          <label
+            >Your review<textarea
+              name="body"
+              rows="4"
+              maxlength="2000"
+              minlength="5"
+              required
+              placeholder="What should another buyer know?"
+            ></textarea>
+          </label>
+          <button class="button button-primary" type="submit">
+            Save review
+          </button>
+          <p class="form-message" id="reviewMessage" aria-live="polite"></p>
+        </form>
+        <div class="review-list" id="reviewList" aria-live="polite">
+          <p>Loading customer reviews…</p>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="page-width footer-inner">
+        <a class="brand brand-footer" href="/"
+          ><span class="brand-mark">R</span
+          ><span class="brand-copy"
+            ><strong>RIVA</strong><small>Everyday intelligence</small></span
+          ></a
+        ><a href="/support/">Customer support</a
+        ><a href="/account/">Your profile</a>
+      </div>
+    </footer>
+    {% include 'storefront/partials/assistant_widget.html' %}
+  </body>
+</html>

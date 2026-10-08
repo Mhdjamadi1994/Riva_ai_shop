@@ -1,0 +1,13 @@
+include README.md
+include LICENSE
+include requirements.txt
+recursive-include apps *.py
+recursive-include apps/storefront/templates *.html
+recursive-include apps/storefront/static *
+recursive-include docs/screenshots *.jpg
+global-exclude *.py[cod]
+prune .git
+prune .venv
+prune .preview
+prune backups
+prune extracted_zip
