@@ -58,6 +58,9 @@ jobs:
       - name: Check Django configuration
         run: python manage.py check
 
+      - name: Collect static files for manifest storage
+        run: python manage.py collectstatic --noinput
+
       - name: Run tests
         shell: bash
         run: |

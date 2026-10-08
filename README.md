@@ -137,6 +137,7 @@ The chat API requires an authenticated conversation. The product recommendation 
 
 ```bash
 python manage.py check
+python manage.py collectstatic --noinput
 python manage.py test --noinput
 docker compose config --quiet
 ```
