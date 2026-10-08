@@ -153,7 +153,13 @@ class InventoryCheckoutTests(TestCase):
         self.assertIn("in_stock", response.data["results"][0])
 
 
-@override_settings(TOMAN_PER_USD=Decimal("1"))
+@override_settings(
+    TOMAN_PER_USD=Decimal("1"),
+    DEMO_MODE=True,
+    PAYMENT_PROVIDER="mock",
+    ALLOW_MOCK_PAYMENTS=True,
+    ALLOW_UNAUDITED_FX_FALLBACK=True,
+)
 class PostgreSQLConcurrentCheckoutTests(TransactionTestCase):
     """Exercise row-level inventory locking against real concurrent PostgreSQL connections."""
 
